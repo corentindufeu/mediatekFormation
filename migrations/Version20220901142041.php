@@ -21,7 +21,8 @@ final class Version20220901142041 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE formation ADD playlist_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE formation ADD CONSTRAINT FK_404021BF6BBD148 FOREIGN KEY (playlist_id) REFERENCES playlist (id)');
+        $this->addSql('ALTER TABLE formation ADD CONSTRAINT FK_404021BF6BBD148 '
+                . 'FOREIGN KEY (playlist_id) REFERENCES playlist (id)');
         $this->addSql('CREATE INDEX IDX_404021BF6BBD148 ON formation (playlist_id)');
     }
 

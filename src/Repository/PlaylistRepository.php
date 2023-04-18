@@ -45,19 +45,22 @@ class PlaylistRepository extends ServiceEntityRepository
      * @param type $ordre
      * @return Playlist[]
      */
-    public function findAllOrderBy($champ, $ordre): array{
+    public function findAllOrderBy($champ, $ordre): array
+    {
+        $stringId = "id";
+        $stringName = "name";
         return $this->createQueryBuilder('p')
-                ->select('p.id id')
-                ->addSelect('p.name name')
-                ->addSelect('c.name categoriename')
+                ->select('p.'.$stringId.' '.$stringId)
+                ->addSelect('p.'.$stringName." ".$stringName)
+                ->addSelect('c.'.$stringName.' categoriename')
                 ->leftjoin('p.formations', 'f')
                 ->leftjoin('f.categories', 'c')
-                ->groupBy('p.id')
-                ->addGroupBy('c.name')
+                ->groupBy('p.'.$stringId)
+                ->addGroupBy('c.'.$stringName)
                 ->orderBy('p.'.$champ, $ordre)
-                ->addOrderBy('c.name')
+                ->addOrderBy('c.'.$stringName)
                 ->getQuery()
-                ->getResult();       
+                ->getResult();
     }
 
     /**
@@ -68,11 +71,12 @@ class PlaylistRepository extends ServiceEntityRepository
      * @param type $table si $champ dans une autre table
      * @return Playlist[]
      */
-    public function findByContainValue($champ, $valeur, $table=""): array{
-        if($valeur==""){
+    public function findByContainValue($champ, $valeur, $table=""): array
+    {
+        if ($valeur=="") {
             return $this->findAllOrderBy('name', 'ASC');
-        }    
-        if($table==""){      
+        }
+        if ($table=="") {
             return $this->createQueryBuilder('p')
                     ->select('p.id id')
                     ->addSelect('p.name name')
@@ -86,8 +90,8 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->orderBy('p.name', 'ASC')
                     ->addOrderBy('c.name')
                     ->getQuery()
-                    ->getResult();              
-        }else{   
+                    ->getResult();
+        } else {
             return $this->createQueryBuilder('p')
                     ->select('p.id id')
                     ->addSelect('p.name name')
@@ -101,10 +105,9 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->orderBy('p.name', 'ASC')
                     ->addOrderBy('c.name')
                     ->getQuery()
-                    ->getResult();              
-            
-        }           
-    }    
+                    ->getResult();
+        }
+    }
 
 
     
