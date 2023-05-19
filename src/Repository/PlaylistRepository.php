@@ -40,75 +40,64 @@ class PlaylistRepository extends ServiceEntityRepository
     }
     
     /**
-     * Retourne toutes les playlists triées sur un champ
-     * @param type $champ
-     * @param type $ordre
-     * @return Playlist[]
-     */
-    public function findAllOrderBy($champ, $ordre): array
-    {
-        $stringId = "id";
-        $stringName = "name";
+    * Retourne toutes les playlists triées sur le nom de la playlist
+    * @param type $champ
+    * @param type $ordre
+    * @return Playlist[]
+    */
+    public function findAllOrderByName($ordre): array{
         return $this->createQueryBuilder('p')
-                ->select('p.'.$stringId.' '.$stringId)
-                ->addSelect('p.'.$stringName." ".$stringName)
-                ->addSelect('c.'.$stringName.' categoriename')
-                ->leftjoin('p.formations', 'f')
-                ->leftjoin('f.categories', 'c')
-                ->groupBy('p.'.$stringId)
-                ->addGroupBy('c.'.$stringName)
-                ->orderBy('p.'.$champ, $ordre)
-                ->addOrderBy('c.'.$stringName)
-                ->getQuery()
-                ->getResult();
+        ->leftjoin('p.formations', 'f')
+        ->groupBy('p.id')
+        ->orderBy('p.name', $ordre)
+        ->getQuery()
+        ->getResult();
+    }
+    /**
+    * Retourne toutes les playlists triées sur le nombre de formations
+    * @param type $ordre
+    * @return Playlist[]
+    */
+    public function findAllOrderByNbFormations($ordre): array{
+        return $this->createQueryBuilder('p')
+        ->leftjoin('p.formations', 'f')
+        ->groupBy('p.id')
+        ->orderBy('count(f.title)', $ordre)
+        ->getQuery()
+        ->getResult();
     }
 
     /**
-     * Enregistrements dont un champ contient une valeur
-     * ou tous les enregistrements si la valeur est vide
-     * @param type $champ
-     * @param type $valeur
-     * @param type $table si $champ dans une autre table
-     * @return Playlist[]
-     */
-    public function findByContainValue($champ, $valeur, $table=""): array
-    {
-        if ($valeur=="") {
-            return $this->findAllOrderBy('name', 'ASC');
+    * Enregistrements dont un champ contient une valeur
+    * ou tous les enregistrements si la valeur est vide
+    * @param type $champ
+    * @param type $valeur
+    * @param type $table si $champ dans une autre table
+    * @return Playlist[]
+    */
+    public function findByContainValue($champ, $valeur, $table=""): array{
+        if($valeur==""){
+            return $this->findAllOrderByName('ASC');
         }
-        if ($table=="") {
+        if($table==""){
             return $this->createQueryBuilder('p')
-                    ->select('p.id id')
-                    ->addSelect('p.name name')
-                    ->addSelect('c.name categoriename')
-                    ->leftjoin('p.formations', 'f')
-                    ->leftjoin('f.categories', 'c')
-                    ->where('p.'.$champ.' LIKE :valeur')
-                    ->setParameter('valeur', '%'.$valeur.'%')
-                    ->groupBy('p.id')
-                    ->addGroupBy('c.name')
-                    ->orderBy('p.name', 'ASC')
-                    ->addOrderBy('c.name')
-                    ->getQuery()
-                    ->getResult();
-        } else {
+            ->leftjoin('p.formations', 'f')
+            ->where('p.'.$champ.' LIKE :valeur')
+            ->setParameter('valeur', '%'.$valeur.'%')
+            ->groupBy('p.id')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+            }else{
             return $this->createQueryBuilder('p')
-                    ->select('p.id id')
-                    ->addSelect('p.name name')
-                    ->addSelect('c.name categoriename')
-                    ->leftjoin('p.formations', 'f')
-                    ->leftjoin('f.categories', 'c')
-                    ->where('c.'.$champ.' LIKE :valeur')
-                    ->setParameter('valeur', '%'.$valeur.'%')
-                    ->groupBy('p.id')
-                    ->addGroupBy('c.name')
-                    ->orderBy('p.name', 'ASC')
-                    ->addOrderBy('c.name')
-                    ->getQuery()
-                    ->getResult();
+            ->leftjoin('p.formations', 'f')
+            ->leftjoin('f.categories', 'c')
+            ->where('c.'.$champ.' LIKE :valeur')
+            ->setParameter('valeur', '%'.$valeur.'%')
+            ->groupBy('p.id')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
         }
     }
-
-
-    
 }

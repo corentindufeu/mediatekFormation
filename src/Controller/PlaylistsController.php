@@ -52,7 +52,7 @@ class PlaylistsController extends AbstractController
      */
     public function index(): Response
     {
-        $playlists = $this->playlistRepository->findAllOrderBy('name', 'ASC');
+        $playlists = $this->playlistRepository->findAllOrderByName('ASC');
         $categories = $this->categorieRepository->findAll();
         return $this->render(self::CHEMINPLAYLISTSTEMPLATE, [
             'playlists' => $playlists,
@@ -61,16 +61,22 @@ class PlaylistsController extends AbstractController
     }
 
     /**
-     * @Route("/playlists/tri/{champ}/{ordre}", name="playlists.sort")
-     * @param type $champ
-     * @param type $ordre
-     * @return Response
-     */
-    public function sort($champ, $ordre): Response
-    {
-        $playlists = $this->playlistRepository->findAllOrderBy($champ, $ordre);
+    * @Route("/playlists/tri/{champ}/{ordre}", name="playlists.sort")
+    * @param type $champ
+    * @param type $ordre
+    * @return Response
+    */
+    public function sort($champ, $ordre): Response{
+        switch($champ){
+            case "name":
+                $playlists = $this->playlistRepository->findAllOrderByName($ordre);
+                break;
+            case "nbformations":
+                $playlists = $this->playlistRepository->findAllOrderByNbFormations($ordre);
+                break;
+        }
         $categories = $this->categorieRepository->findAll();
-        return $this->render(self::CHEMINPLAYLISTSTEMPLATE, [
+        return $this->render("pages/playlists.html.twig", [
             'playlists' => $playlists,
             'categories' => $categories
         ]);
