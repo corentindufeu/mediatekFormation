@@ -1,0 +1,39 @@
+{% extends "basefront.html.twig" %}
+
+{% block body %}
+    <h2>Détail Formation :</h2>
+    <form method="POST" action="{{ path('admin.formation.registerone')}}">
+        <div class="form-group mt-4">
+            <label for="titleInput">Titre</label>
+            <input type="text" class="form-control" id="titleInput" name="titleInput" required>
+        </div>
+        <div class="form-group mt-4">
+            <label for="descriptionInput">Description</label>
+            <textarea class="form-control" id="descriptionInput" rows="3" name="descriptionTextArea"></textarea>
+        </div>
+        <div class="form-group mt-4">
+            <label for="categorieSelect">Playlist</label>
+            <select class="form-control" id="playlistsSelect" name="playlistsSelect" required>
+                {% for playlist in playlists %}
+                    <option value="{{ playlist.id }}">{{ playlist.name }}&nbsp;</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group mt-4">
+            <fieldset>
+                <legend>Catégories</legend>
+                {% for category in categories %}
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" value="{{ category.id }}" name="categoryInput[{{ category.id }}]">
+                        <label class="custom-control-label">{{ category.name }}</label>
+                    </div>
+                {% endfor %}
+            </fieldset>
+        </div>
+        <div class="form-group mt-4" required>
+            <label for="videoIdInput">Clée de la vidéo YouTube</label>
+            <input type="text" class="form-control" id="videoIdInput" name="videoIdInput" required>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2 mt-4">Valider</button>
+  </form>
+{% endblock %}
