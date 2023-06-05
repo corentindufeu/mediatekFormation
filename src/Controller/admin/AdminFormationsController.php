@@ -166,7 +166,7 @@ class AdminFormationsController extends AbstractController
         $playlistSelect = $request->get("playlistsSelect");
         $categoriesSelect = $request->get("categoryInput");
         $videoIdInput = $request->get("videoIdInput");
-        if(isset($titleInput) && isset($descriptionTextArea) && isset($playlistSelect) && isset($categoriesSelect) && isset($videoIdInput)) {
+        if(isset($titleInput) && isset($playlistSelect) && isset($videoIdInput)) {
             if($id != null) {
                 $formation = $this->formationRepository->find($id);
                 $categoriesFormation = $formation->getCategories();
