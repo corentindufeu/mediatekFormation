@@ -1,0 +1,16 @@
+{% extends "admin/admin.basefront.html.twig" %}
+
+{% block body %}
+    <h2>Détail Formation :</h2>
+    <form method="POST" action="{{ path('admin.playlist.registerone')}}">
+        <div class="form-group mt-4">
+            <label for="nameInput">Titre</label>
+            <input type="text" class="form-control" id="nameInput" name="nameInput" required>
+        </div>
+        <div class="form-group mt-4">
+            <label for="descriptionInput">Description</label>
+            <textarea class="form-control" id="descriptionInput" rows="3" name="descriptionTextArea"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2 mt-4">Valider</button>
+    </form>
+{% endblock %}
